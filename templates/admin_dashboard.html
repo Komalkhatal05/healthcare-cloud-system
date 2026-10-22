@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<span class="pill">ADMINISTRATION</span>
+<h1 class="h2 fw-bold mt-2">System Dashboard</h1>
+<p class="text-secondary">Manage doctor accounts and review portal activity.</p>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="stat-card"><span>Total Patients</span><h3>{{ patients|length }}</h3></div></div>
+  <div class="col-md-4"><div class="stat-card"><span>Total Doctors</span><h3>{{ doctors|length }}</h3></div></div>
+  <div class="col-md-4"><div class="stat-card"><span>Appointments</span><h3>{{ appointments|length }}</h3></div></div>
+</div>
+<div class="card panel-card mb-4"><div class="card-body p-4">
+<h2 class="h5 fw-bold">Create Doctor Account</h2>
+<form method="POST" action="{{ url_for('add_doctor') }}">
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Doctor name</label><input class="form-control" name="name" required></div>
+<div class="col-md-6"><label class="form-label">Email</label><input class="form-control" type="email" name="email" required></div>
+<div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" name="phone" required></div>
+<div class="col-md-6"><label class="form-label">Specialization</label><input class="form-control" name="specialization" required></div>
+<div class="col-md-6"><label class="form-label">Temporary password</label><input class="form-control" type="password" name="password" minlength="8" required><small class="text-secondary">Must include uppercase, lowercase, number and symbol.</small></div>
+<div class="col-12"><button class="btn btn-primary">Create Doctor</button></div>
+</div></form>
+</div></div>
+<div class="card panel-card mb-4"><div class="card-body p-4">
+<h2 class="h5 fw-bold">Registered Patients</h2>
+<div class="table-responsive"><table class="table"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th></tr></thead><tbody>
+{% for p in patients %}<tr><td>{{ p['id'] }}</td><td>{{ p['name'] }}</td><td>{{ p['email'] }}</td><td>{{ p['phone'] }}</td></tr>
+{% else %}<tr><td colspan="4">No registered patients yet.</td></tr>{% endfor %}
+</tbody></table></div>
+</div></div>
+<div class="card panel-card mb-4"><div class="card-body p-4">
+<h2 class="h5 fw-bold">Doctors</h2>
+<div class="table-responsive"><table class="table"><thead><tr><th>Name</th><th>Email</th><th>Specialization</th></tr></thead><tbody>
+{% for d in doctors %}<tr><td>{{ d['name'] }}</td><td>{{ d['email'] }}</td><td>{{ d['specialization'] }}</td></tr>{% endfor %}
+</tbody></table></div>
+</div></div>
+<div class="card panel-card"><div class="card-body p-4">
+<h2 class="h5 fw-bold">All Appointments</h2>
+<div class="table-responsive"><table class="table"><thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th></tr></thead><tbody>
+{% for a in appointments %}<tr><td>{{ a['patient_name'] }}</td><td>{{ a['doctor_name'] }}</td><td>{{ a['appointment_date'] }}</td><td>{{ a['status'] }}</td></tr>
+{% else %}<tr><td colspan="4">No appointments yet.</td></tr>{% endfor %}
+</tbody></table></div>
+</div></div>
+<hr class="my-4">
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h3 class="h5 mb-3">Upload Patient Medical Report / X-Ray</h3>
+
+        <form method="POST"
+              action="{{ url_for('upload_medical_file') }}"
+              enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Select Patient</label>
+                <select name="patient_id" class="form-select" required>
+                    <option value="">Choose Patient</option>
+                    {% for p in patients %}
+                    <option value="{{ p['id'] }}">
+                        {{ p['name'] }} — {{ p['email'] }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Report Title</label>
+                <input type="text" name="title"
+                       class="form-control"
+                       placeholder="Medical Report or X-Ray"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Choose File</label>
+                <input type="file" name="file"
+                       class="form-control"
+                       accept=".pdf,.png,.jpg,.jpeg"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Upload Report
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

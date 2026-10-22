@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Patient Registration{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="role-icon mb-3">👤</div>
+      <h1 class="h3 fw-bold">Create patient account</h1>
+      <p class="text-secondary">Your profile will be available after registration and login.</p>
+      <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+        <div class="mb-3"><label class="form-label">Full name</label><input class="form-control" name="name" maxlength="100" required autocomplete="name"></div>
+        <div class="mb-3"><label class="form-label">Email address</label><input class="form-control" type="email" name="email" required autocomplete="email"></div>
+        <div class="mb-3"><label class="form-label">Mobile number</label><input class="form-control" name="phone" maxlength="20" required autocomplete="tel"></div>
+        <div class="mb-3"><label class="form-label">Password</label><input class="form-control" id="password" type="password" name="password" minlength="8" required autocomplete="new-password"></div>
+        <ul class="password-rules small text-secondary">
+          <li>At least 8 characters</li><li>Uppercase and lowercase letters</li><li>At least one number</li><li>At least one symbol, e.g. @ or #</li>
+        </ul>
+        <div class="mb-3"><label class="form-label">Confirm password</label><input class="form-control" id="confirmPassword" type="password" name="confirm_password" minlength="8" required autocomplete="new-password"></div>
+        <button class="btn btn-primary btn-lg w-100">Register as Patient</button>
+      </form>
+      <p class="mt-4 mb-0 text-secondary">Already registered? <a href="{{ url_for('login') }}">Login</a></p>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  const p = document.getElementById("password").value;
+  const c = document.getElementById("confirmPassword").value;
+  if (p !== c) { e.preventDefault(); alert("Passwords do not match."); }
+});
+</script>
+{% endblock %}

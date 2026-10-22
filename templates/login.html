@@ -1,32 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Healthcare Login</title>
-</head>
-<body>
-
-    <h1>Healthcare Login</h1>
-
-    <form action="/login" method="POST">
-
-        <input type="text" name="username" placeholder="Username" required>
-        <br><br>
-
-        <input type="password" name="password" placeholder="Password" required>
-        <br><br>
-
-        <label>Select Role:</label>
-
-        <select name="role" required>
-            <option value="patient">Patient</option>
-            <option value="doctor">Doctor</option>
-        </select>
-
-        <br><br>
-
-        <button type="submit">Login</button>
-
-    </form>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Login | HealthCare Plus{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <div class="card-body p-4 p-md-5">
+      <div class="role-icon mb-3">🔐</div>
+      <h1 class="h3 fw-bold">Welcome back</h1>
+      <p class="text-secondary">Login with your registered email and password.</p>
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="mb-3"><label class="form-label">Email address</label><input class="form-control form-control-lg" type="email" name="email" required autocomplete="username"></div>
+        <div class="mb-3"><label class="form-label">Password</label><input class="form-control form-control-lg" type="password" name="password" required autocomplete="current-password"></div>
+        <button class="btn btn-primary btn-lg w-100">Login securely</button>
+      </form>
+      <p class="mt-4 mb-0 text-secondary">New patient? <a href="{{ url_for('register') }}">Create an account</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

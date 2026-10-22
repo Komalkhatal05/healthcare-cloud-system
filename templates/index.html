@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Home | HealthCare Plus{% endblock %}
+{% block content %}
+<section class="hero rounded-4 p-4 p-md-5 mb-4">
+  <div class="row align-items-center g-4">
+    <div class="col-md-7">
+      <span class="pill">YOUR HEALTH, OUR PRIORITY</span>
+      <h1 class="display-5 fw-bold mt-3">Healthcare made simple.</h1>
+      <p class="lead">A single portal to manage patient profiles, doctor appointments and healthcare administration.</p>
+      <div class="d-flex flex-wrap gap-2 mt-4">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}">Create Patient Account</a>
+        <a class="btn btn-outline-primary btn-lg" href="{{ url_for('login') }}">Login</a>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="health-art">
+        <div class="medical-cross">✚</div>
+        <h3>Care that connects</h3>
+        <p class="mb-0">Patients · Doctors · Administration</p>
+      </div>
+    </div>
+  </div>
+</section>
+<h2 class="h3 fw-bold mb-3">One portal. Three roles.</h2>
+<div class="row g-3">
+  <div class="col-md-4"><div class="card role-card h-100"><div class="card-body p-4"><div class="role-icon">👤</div><h3 class="h5 mt-3">Patient</h3><p class="text-secondary">Register, sign in, view your profile and request appointments.</p><a href="{{ url_for('register') }}">Get started →</a></div></div></div>
+  <div class="col-md-4"><div class="card role-card h-100"><div class="card-body p-4"><div class="role-icon">🩺</div><h3 class="h5 mt-3">Doctor</h3><p class="text-secondary">View assigned appointment requests and update their status.</p><a href="{{ url_for('login') }}">Doctor login →</a></div></div></div>
+  <div class="col-md-4"><div class="card role-card h-100"><div class="card-body p-4"><div class="role-icon">🛡️</div><h3 class="h5 mt-3">Administrator</h3><p class="text-secondary">Manage doctor accounts and view patient and appointment lists.</p><a href="{{ url_for('login') }}">Admin login →</a></div></div></div>
+</div>
+{% endblock %}

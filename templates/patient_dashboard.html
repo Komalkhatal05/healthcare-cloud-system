@@ -1,14 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Patient Dashboard</title>
-</head>
-<body>
-    <h1>Patient Dashboard</h1>
-    <h2>Welcome {{ username }}</h2>
-
-    <p>View Appointments</p>
-    <p>View Medical Records</p>
-    <p>Book Appointment</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Patient Dashboard{% endblock %}
+{% block content %}
+<div class="dashboard-heading mb-4">
+  <div><span class="pill">PATIENT PORTAL</span><h1 class="h2 fw-bold mt-2">Hello, {{ patient['name'] }}!</h1><p class="text-secondary mb-0">Your personal healthcare dashboard.</p></div>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="stat-card"><span>Patient ID</span><h3>#{{ patient['id'] }}</h3></div></div>
+  <div class="col-md-4"><div class="stat-card"><span>Appointments</span><h3>{{ appointments|length }}</h3></div></div>
+  <div class="col-md-4"><div class="stat-card"><span>Account</span><h3 class="text-success">Active</h3></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card panel-card mb-4"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">My Profile</h2><hr>
+      <p><strong>Name:</strong> {{ patient['name'] }}</p>
+      <p><strong>Email:</strong> {{ patient['email'] }}</p>
+      <p><strong>Phone:</strong> {{ patient['phone'] }}</p>
+      <p class="mb-0"><strong>Registered:</strong> {{ patient['created_at'][:10] }}</p>
+    </div></div>
+    <div class="card panel-card"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">Request Appointment</h2>
+      <form method="POST" action="{{ url_for('book_appointment') }}">
+        <label class="form-label mt-2">Select doctor</label>
+        <select class="form-select" name="doctor_id" required>
+          <option value="">Choose a doctor</option>
+          {% for doctor in doctors %}
+          <option value="{{ doctor['id'] }}">{{ doctor['name'] }} — {{ doctor['specialization'] }}</option>
+          {% endfor %}
+        </select>
+        <label class="form-label mt-3">Appointment date</label>
+        <input class="form-control" type="date" name="appointment_date" min="{{ now_date }}" required>
+        <label class="form-label mt-3">Reason for visit</label>
+        <textarea class="form-control" name="reason" maxlength="500" rows="3" required></textarea>
+        <button class="btn btn-primary w-100 mt-3">Submit Request</button>
+      </form>
+    </div></div>
+  </div>
+  <div class="col-lg-7">
+    <div class="card panel-card"><div class="card-body p-4">
+      <h2 class="h5 fw-bold">My Appointments</h2>
+      {% if appointments %}
+      <div class="table-responsive"><table class="table align-middle">
+        <thead><tr><th>Date</th><th>Doctor</th><th>Status</th></tr></thead>
+        <tbody>{% for a in appointments %}
+        <tr><td>{{ a['appointment_date'] }}</td><td>{{ a['doctor_name'] }}<div class="small text-secondary">{{ a['specialization'] }}</div></td><td><span class="badge text-bg-info">{{ a['status'] }}</span><div class="small text-secondary">{{ a['reason'] }}</div></td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+      {% else %}<div class="empty-state"><div class="role-icon">📅</div><p class="mb-0">No appointments yet. You can request one here.</p></div>{% endif %}
+    </div></div>
+  </div>
+</div>
+{% endblock %}

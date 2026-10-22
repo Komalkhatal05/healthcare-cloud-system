@@ -1,14 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Doctor Dashboard</title>
-</head>
-<body>
-    <h1>Doctor Dashboard</h1>
-    <h2>Welcome {{ username }}</h2>
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard{% endblock %}
+{% block content %}
+<span class="pill">DOCTOR PORTAL</span>
+<h1 class="h2 fw-bold mt-2">Welcome, Dr. {{ session['name'] }}</h1>
+<p class="text-secondary">Review appointment requests assigned to your account.</p>
+<div class="stat-card mb-4"><span>Assigned appointments</span><h3>{{ appointments|length }}</h3></div>
+<div class="card panel-card"><div class="card-body p-4">
+<h2 class="h5 fw-bold">Appointment List</h2>
+{% if appointments %}
+<div class="table-responsive"><table class="table align-middle">
+<thead><tr><th>Patient</th><th>Date</th><th>Reason</th><th>Status</th><th>Update</th></tr></thead>
+<tbody>{% for a in appointments %}
+<tr>
+<td>{{ a['patient_name'] }}<div class="small text-secondary">{{ a['patient_email'] }}</div></td>
+<td>{{ a['appointment_date'] }}</td><td>{{ a['reason'] }}</td><td>{{ a['status'] }}</td>
+<td><form method="POST" action="{{ url_for('update_appointment', appointment_id=a['id']) }}" class="d-flex gap-2">
+<select name="status" class="form-select form-select-sm">
+{% for s in ['Pending','Approved','Completed','Cancelled'] %}
+<option value="{{ s }}" {% if s == a['status'] %}selected{% endif %}>{{ s }}</option>
+{% endfor %}
+</select><button class="btn btn-primary btn-sm">Save</button>
+</form></td>
+</tr>
+{% endfor %}</tbody></table></div>
+{% else %}<div class="empty-state">No appointment requests assigned yet.</div>{% endif %}
+</div></div>
+<hr class="my-4">
 
-    <p>View Patients</p>
-    <p>Manage Appointments</p>
-    <p>View Medical Records</p>
-</body>
-</html>
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h3 class="h5 mb-3">Upload Patient Medical Report</h3>
+
+        <form method="POST"
+              action="{{ url_for('upload_medical_file') }}"
+              enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Select Assigned Patient</label>
+<select name="patient_id" class="form-select" required>
+    <option value="">Choose Patient</option>
+    {% for p in assigned_patients %}
+    <option value="{{ p['id'] }}">
+        {{ p['name'] }} ({{ p['email'] }})
+    </option>
+    {% endfor %}
+</select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Report Title</label>
+                <input type="text"
+                       name="title"
+                       class="form-control"
+                       placeholder="Medical Report or X-Ray"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Choose Report File</label>
+                <input type="file"
+                       name="file"
+                       class="form-control"
+                       accept=".pdf,.png,.jpg,.jpeg"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Upload Report
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

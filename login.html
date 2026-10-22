@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Healthcare Login</title>
+</head>
+
+<body>
+
+    <h1>Healthcare Login</h1>
+
+    <form action="/login" method="POST">
+
+        <!-- Username -->
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+        >
+
+        <br><br>
+
+        <!-- Password -->
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+        >
+
+        <br><br>
+
+        <!-- Role -->
+        <label>Select Role:</label>
+
+        <select name="role" required>
+
+            <option value="Patient">Patient</option>
+
+            <option value="Doctor">Doctor</option>
+
+            <option value="Admin">Admin</option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+</body>
+</html>
